@@ -35,6 +35,13 @@ return {
                     "and {C:attention}#1# {C:parcel,T:tag_draft_sealedtag}Sealed Tag{}",
                 },
             },
+            b_draft_clipperdeck = {
+                name = "Rending Deck",
+                text = {
+                    "Start run with {C:attention}#1#",
+                    "{C:packet,T:tag_draft_clippertag}Cleaving Tags{}",
+                },
+            },
             b_draft_evolvingdeck = {
                 name = "Evolving Deck",
                 text = {
@@ -72,6 +79,13 @@ return {
                     "{C:green}X#3#{} other cards"
                 },
             },
+            c_draft_atroposshears = {
+                name = "Atropos's Shears",
+                text = {
+                    "Destroy {C:red}all{}",
+                    "{C:attention}selected{} cards"
+                },
+            }
         },
         Packet = {
             c_draft_revolution = {
@@ -540,7 +554,7 @@ return {
             c_draft_thedarkside = {
                 name = "The Dark Side",
                 text = {
-                    "{C:money}#1#{}",
+                    --"{C:money}#1#{}",
                     "{C:green}X#2#{} {C:club}Clubs{}",
                     "{C:green}X#3#{} {C:spade}Spades{}",
                 },
@@ -548,7 +562,6 @@ return {
             c_draft_betterredthandead = {
                 name = "Better Red Than Dead",
                 text = {
-                    "{C:money}#1#{}",
                     "{C:green}X#2#{} {C:heart}Hearts{}",
                     "{C:green}X#3#{} {C:diamond}Diamonds{}"
                 },
@@ -556,7 +569,6 @@ return {
             c_draft_checkered = {
                 name = "Checkered",
                 text = {
-                    "{C:money}#1#{}",
                     "{C:green}X#2#{} {C:heart}Hearts{}",
                     "{C:green}X#3#{} {C:spade}Spades{}"
                 },
@@ -564,7 +576,6 @@ return {
             c_draft_chessboard = {
                 name = "Chessboard",
                 text = {
-                    "{C:money}#1#{}",
                     "{C:green}X#2#{} {C:diamond}Diamonds{}",
                     "{C:green}X#3#{} {C:clubs}Clubs{}"
                 },
@@ -572,7 +583,6 @@ return {
             c_draft_bloodandiron = {
                 name = "Blood and Iron",
                 text = {
-                    "{C:money}#1#{}",
                     "{C:green}X#2#{} {C:heart}Hearts{}",
                     "{C:green}X#3#{} {C:club}Clubs{}"
                 },
@@ -580,7 +590,6 @@ return {
             c_draft_digginanddrillin = {
                 name = "Diggin' and Drillin'",
                 text = {
-                    "{C:money}#1#{}",
                     "{C:green}X#2#{} {C:diamond}Diamonds{}",
                     "{C:green}X#3#{} {C:spade}Spades{}"
                 },
@@ -588,7 +597,6 @@ return {
             c_draft_facethemusic = {
                 name = "Face the Music",
                 text = {
-                    "{C:money}#1#{}",
                     "{C:green}X#2#{} {C:attention}face{} cards",
                     "{C:green}X#3#{} cards with",
                     "{C:red}no{} {C:attention}Aces{}"
@@ -597,7 +605,6 @@ return {
             c_draft_havealltheaces = {
                 name = "Have All the Aces",
                 text = {
-                    "{C:money}#1#{}",
                     "{C:green}X#2#{} {C:attention}Aces{}",
                     "{C:green}X#3#{} other cards"
                 },
@@ -605,7 +612,6 @@ return {
             c_draft_highvaluegoods = {
                 name = "High Value Goods",
                 text = {
-                    "{C:money}#1#{}",
                     "{C:green}X#2#{} {C:attention}Edition{} cards",
                     "{C:green}X#3#{} other cards"
                 },
@@ -613,7 +619,6 @@ return {
             c_draft_hackstarterpack = {
                 name = "Hack Starter Pack",
                 text = {
-                    "{C:money}#1#{}",
                     "{C:green}X#2#{} cards of",
                     "rank {C:attention}2{}, {C:attention}3{}, {C:attention}4{}, or {C:attention}5{} ",
                     "{C:green}X#3#{} other cards",
@@ -623,7 +628,6 @@ return {
             c_draft_thefutureismeow = {
                 name = "The Future is Meow",
                 text = {
-                    "{C:money}#1#{}",
                     "{C:green}X#2#{} {C:attention}lucky 7{}s",
                     "{C:green}X#3#{} other cards",
                     "Create a {C:attention}Lucky Cat{}"
@@ -632,7 +636,6 @@ return {
             c_draft_psychichex = {
                 name = "Psychic Hex",
                 text = {
-                    "{C:money}#1#{}",
                     "{C:green}X#2#{} {C:attention}Enhanced 6{}s",
                     "{C:green}X#3#{} other cards",
                     "Create a {C:attention}Sixth Sense{}"
@@ -641,7 +644,6 @@ return {
             c_draft_whoyougonnacall = {
                 name = "Who You Gonna Call",
                 text = {
-                    "{C:money}#1#{}",
                     "{C:green}X#2#{} {C:attention}4{}s and {C:attention}10{}s",
                     "{C:green}X#3#{} other cards",
                     "Create a {C:attention}Walkie Talkie{}"
@@ -650,7 +652,6 @@ return {
             c_draft_stowaway = {
                 name = "Stowaway",
                 text = {
-                    "{C:money}#1#{}",
                     "{C:green}X#2#{} cards",
                     "Create a {C:attention}Riff-Raff{}"
                 },
@@ -658,7 +659,6 @@ return {
             c_draft_illicitshipment = {
                 name = "Illicit Shipment",
                 text = {
-                    "{C:money}#1#{}",
                     "{C:green}X#2#{} cards",
                     "Create a {C:attention}Gros Michel{}"
                 },
@@ -666,7 +666,6 @@ return {
             c_draft_exoticshipment = {
                 name = "Exotic Shipment",
                 text = {
-                    "{C:money}#1#{}",
                     "{C:green}X#2#{} {C:bunco_exotic}Exotic{} cards",
                     "{C:green}X#2#{} other cards"
                 },
@@ -674,7 +673,6 @@ return {
             c_draft_polymerchains = {
                 name = "Polymer Chains",
                 text = {
-                    "{C:money}#1#{}",
                     "{C:green}X#2#{}  cards",
                     "Create an {C:bunco_virtual_dark}Arcade Tag{}"
                 },
@@ -682,7 +680,6 @@ return {
             c_draft_allalone = {
                 name = "All Alone",
                 text = {
-                    "{C:money}#1#{}",
                     "{C:green}X#2#{} cards with",
                     "{C:red}no{} {C:attention}face{} cards"
                 },
@@ -690,7 +687,6 @@ return {
             c_draft_investinyourself = {
                 name = "Invest in Yourself",
                 text = {
-                    "{C:money}#1#{}",
                     "{C:green}X#2#{} cards",
                     "Create an {C:green}Investment Tag{}"
                 },
@@ -698,7 +694,6 @@ return {
             c_draft_overdraft = {
                 name = "Overdraft",
                 text = {
-                    "{C:money}#1#{}",
                     "{C:green}X#2#{} cards",
                     "Create an {C:packet}Draft Tag{}"
                 },
@@ -706,7 +701,6 @@ return {
             c_draft_yourreadingis = {
                 name = "Your Reading Is...",
                 text = {
-                    "{C:money}#1#{}",
                     "{C:green}X#2#{} cards",
                     "Create a {C:tarot}Charm Tag{}"
                 },
@@ -714,7 +708,6 @@ return {
             c_draft_spectralprocession = {
                 name = "Spectral Procession",
                 text = {
-                    "{C:money}#1#{}",
                     "{C:green}X#2#{} cards",
                     "Create a {C:spectral}Ethereal Tag{}"
                 },
@@ -722,9 +715,128 @@ return {
             c_draft_aimforthestars = {
                 name = "Aim for the Stars",
                 text = {
-                    "{C:money}#1#{}",
                     "{C:green}X#2#{} cards",
                     "Create a {C:planet}Meteor Tag{}"
+                },
+            },
+        },
+        Clipper = {
+            c_draft_safetyscissors = {
+                name = "Safety Scissors",
+                text = {
+                    --"{C:money}#1#{}",
+                    "Destroy {C:red}X#2#{}",
+                    "{C:attention}selected{} cards"
+                },
+            },
+            c_draft_chainsaw = {
+                name = "Chainsaw",
+                text = {
+                    "Destroy {C:red}X#2#{}",
+                    "{C:attention}random{} cards"
+                },
+            },
+            c_draft_pizzacutter = {
+                name = "Pizza Cutter",
+                text = {
+                    "Destroy {C:red}X#2#{}",
+                    "{C:attention}random{} {C:red}non{}-{C:attention}face{} cards"
+                },
+            },
+            c_draft_sword = {
+                name = "Sword",
+                text = {
+                    "Destroy {C:red}X#2#{}",
+                    "{C:attention}random{} {C:attention}face{} cards"
+                },
+            },
+            c_draft_sharktooth = {
+                name = "Shark Tooth",
+                text = {
+                    "Destroy {C:red}X#2#-#3#{}",
+                    "{C:attention}random{} cards"
+                },
+            },
+            c_draft_cleaver = {
+                name = "Cleaver",
+                text = {
+                    "Destroy {C:red}X#2#{}",
+                    "{C:attention}selected{} cards of",
+                    "rank {C:attention}#3#{} or less"
+                },
+            },
+            c_draft_embroideryscissors = {
+                name = "Embroidery Scissors",
+                text = {
+                    "Destroy {C:red}X#2#{} {C:attention}selected{} cards",
+                    "and {C:red}X#3#{} {C:attention}random{} card"
+                },
+            },
+            c_draft_butterknife = {
+                name = "Butter Knife",
+                text = {
+                    "Destroy {C:red}X#2#{}",
+                    "{C:attention}selected{} card",
+                    "and {C:red}X#3#{}",
+                    "{C:attention}random{} cards"
+                },
+            },
+            c_draft_club = {
+                name = "Club",
+                text = {
+                    "Destroy {C:red}X#2#{}",
+                    "{C:attention}selected{} {C:club}Clubs{}"
+                },
+            },
+            c_draft_spade = {
+                name = "Spade",
+                text = {
+                    "Destroy {C:red}X#2#{}",
+                    "{C:attention}selected{} {C:spade}Spades{}"
+                },
+            },
+            c_draft_diamondcutter = {
+                name = "Diamond Cutter",
+                text = {
+                    "Destroy {C:red}X#2#{}",
+                    "{C:attention}selected{} {C:diamond}Diamonds{}"
+                },
+            },
+            c_draft_scalpel = {
+                name = "Scalpel",
+                text = {
+                    "Destroy {C:red}X#2#{}",
+                    "{C:attention}selected{} {C:heart}Hearts{}"
+                },
+            },
+            c_draft_axe = {
+                name = "Axe",
+                text = {
+                    "Destroy {C:red}X#2#{}",
+                    "{C:attention}selected{} {C:attention}face{} cards"
+                },
+            },
+            c_draft_guillotine = {
+                name = "Guillotine",
+                text = {
+                    "Destroy {C:red}all{}",
+                    "{C:attention}face{} cards"
+                },
+            },
+            c_draft_scythe = {
+                name = "Scythe",
+                text = {
+                    "Destroy {C:red}all{}",
+                    "cards of rank {C:attention}#2#{}",
+                    "or less"
+                },
+            },
+            c_draft_lasercutter = {
+                name = "Laser Cutter",
+                text = {
+                    "Destroy {C:red}X#2#{}",
+                    "{C:attention}selected{} cards of",
+                    "equal rank"
                 },
             },
         },
@@ -764,6 +876,13 @@ return {
                     "{C:parcel}Slim Sealed Crate{}",
                 },
             },
+            tag_draft_clippertag = {
+                name = "Cleaving Tag",
+                text = {
+                    "Immediately open a",
+                    "{C:packet}Cleaving Crate{}",
+                },
+            },
         },
         Sleeve = {
 			sleeve_draft_draftsleeve = {
@@ -796,8 +915,14 @@ return {
                     "too"
 				},
 			},
+            sleeve_draft_clippersleeve = {
+				name = "Rending Sleeve",
+				text = {
+                    "Start run with {C:attention}#1#{} {C:clipper,T:tag_draft_clippertag}Cleaving Tags{}"
+				},
+			},
 			sleeve_draft_evolvingsleeve = {
-				name = "Sealed Sleeve",
+				name = "Evolving Sleeve",
 				text = {
                     "Start run with no deck",
                     "and {C:attention}#1# {C:parcel,T:tag_draft_slimsealedtag}Slim Sealed Tag{}",
@@ -805,7 +930,7 @@ return {
 				},
 			},
 			sleeve_draft_evolvingsleeve_alt = {
-				name = "Sealed Sleeve",
+				name = "Evolving Sleeve",
 				text = {
                     "After defeating each","{C:attention}Boss Blind{}, gain a {C:packet,T:tag_draft_drafttag}Draft Tag{}"
 				},
@@ -853,7 +978,21 @@ return {
                     "Choose {C:attention}#1#{} of up to",
                     "{C:attention}#2#{} {C:parcel}Parcels{}"
                 }
-            }
+            },
+            p_draft_clipper_pack = {
+                name = "Cleaving Crate",
+                text = {
+                    "Choose {C:attention}#1#{} of up to",
+                    "{C:attention}#2#{} {C:clipper}Clippers{}"
+                }
+            },
+            p_draft_clipper_pack_1 = {
+                name = "Cleaving Crate",
+                text = {
+                    "Choose {C:attention}#1#{} of up to",
+                    "{C:attention}#2#{} {C:clipper}Clippers{}"
+                }
+            },
         }
     },
     misc = {
@@ -866,15 +1005,28 @@ return {
         dictionary = {
             k_draft_draft_pack = "Draft Crate",
             k_draft_sealed_pack = "Sealed Crate",
+            k_draft_clipper_pack = "Cleaving Crate",
             k_mtj = "MTJ",
             k_cryptid = "Cryptid",
             k_bunco = "Bunco",
+            k_multisuitmods = "Suit Mods",
             mode_not_found_error = "Mode could not be found! Did you remove its mod?",
             
             neutral_packet_collation = "Neutral Packet Collation",
             neutral_packet_collation_desc = {
                 "Draft Crates will always contain",
                 "at least one neutral Packet"
+            },
+            include_in_run = "Include in Run",
+            include_in_run_desc = {
+                "Draft and Cleaving Crates will",
+                "appear in runs"
+            },
+            soul_cards = "Soul Cards",
+            soul_cards_desc = {
+                "Include Soul cards for",
+                "Packets, Parcels and Clippers",
+                "(Requires restart)"
             },
         },
         labels = {

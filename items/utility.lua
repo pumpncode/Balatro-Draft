@@ -11,6 +11,13 @@ function dissect(var)
     end
 end
 
+-- Debug message
+function G.FUNCS.draftSay(message, level)
+    message = message or "???"
+    level = level or "DEBUG"
+    sendMessageToConsole(level, "Drafting", message)
+end
+
 G.FUNCS.format_cost = function(num)
     local str = "$"..tostring(math.abs(num))
     if num == 0 then
@@ -24,7 +31,7 @@ G.FUNCS.format_cost = function(num)
 end
 
 --[[G.FUNCS.create_playing_card_in_deck = function(t)
-    if not t.suits then t.suits = SMODS.Suits end
+    if not t.suits then t.suits = G.FUNCS.filter_suits({not_fake = true}) end
     if not t.ranks then t.ranks = SMODS.Ranks end
     local cards = {}
     cards[1] = true
@@ -46,11 +53,7 @@ end]]
 
 G.FUNCS.create_playing_card_in_deck_alt = function(t)
     if not t.suits then
-        if t.allow_hidden then
-            t.suits = SMODS.Suits
-        else
-            t.suits = G.FUNCS.not_hidden_suits()
-        end
+        t.suits = G.FUNCS.filter_suits(t)
     end
     if not t.ranks then t.ranks = SMODS.Ranks end
     local cards = {}
@@ -108,7 +111,59 @@ function compact(x)
     return { value }
 end
 
+G.FUNCS.filter_suits = function (t)
+    t = t or {}
+    local ret = {}
+    for key, value in pairs(SMODS.Suits) do
+        local valid = true
+        if t.only_vanilla then
+            if key ~= "Spades" and key ~= "Hearts" and key ~="Clubs" and key ~= "Diamonds" then
+                valid = false
+                --G.FUNCS.draftsay(key.." excluded: Not vanilla", "TRACE")
+            end
+        end
+        if not t.allow_hidden and not t.only_exotic and value.hidden then
+            valid = false
+            --G.FUNCS.draftsay(key.." excluded: Hidden", "TRACE")
+        end
+        if not t.allow_fake and value.fake then
+            valid = false
+            --G.FUNCS.draftsay(key.." excluded: Fake", "TRACE")
+        end
+        if t.block_exotic and value.exotic then
+            valid = false
+            --G.FUNCS.draftsay(key.." excluded: Exotic", "TRACE")
+        end
+        if t.only_exotic and not value.exotic then
+            valid = false
+            --G.FUNCS.draftsay(key.." excluded: Not exotic", "TRACE")
+        end
+        if not t.ignore_pool and not (value.in_pool == nil or value.in_pool()) then --Vanilla suits don't have an in_pool
+            valid = false
+            --G.FUNCS.draftsay(key.." excluded: Not in pool", "TRACE")
+        end
+        if valid and t.exclude then
+            for xkey, xvalue in pairs(t.exclude) do
+                if key == xkey then valid = false end
+                --G.FUNCS.draftsay(key.." excluded: Explicitly excluded", "TRACE")
+            end
+        end
+        if valid then ret[key] = value end
+    end
+    if ret == {} then
+        G.FUNCS.draftSay("Please check your filter_suits arguments; no valid suits remain! Returning vanilla suits.", "ERROR")
+        ret = {
+            SMODS.Suits["Hearts"],
+            SMODS.Suits["Diamonds"],
+            SMODS.Suits["Clubs"],
+            SMODS.Suits["Spades"],
+        }
+    end
+    return ret
+end
+
 G.FUNCS.not_hidden_suits = function ()
+    G.FUNCS.draftSay("not_hidden_suits is deprecated, use filter_suits instead!", "WARN ")
     local ret = {}
     for key, value in pairs(SMODS.Suits) do
         if not value.hidden then
@@ -120,7 +175,7 @@ end
 
 --[[G.FUNCS.create_playing_cards_in_deck = function(t)
     if not t.amount then t.amount = 1 end
-    if not t.suits then t.suits = SMODS.Suits end
+    if not t.suits then t.suits = G.FUNCS.filter_suits({not_fake = true}) end
     if not t.ranks then t.ranks = SMODS.Ranks end
     local current_rank
     local _suit, _rank, _center
@@ -171,11 +226,7 @@ end]]
 G.FUNCS.create_playing_cards_in_deck_alt = function(t)
     if not t.amount then t.amount = 1 end
     if not t.suits then
-        if t.allow_hidden then
-            t.suits = SMODS.Suits
-        else
-            t.suits = G.FUNCS.not_hidden_suits()
-        end
+        t.suits = G.FUNCS.filter_suits(t)
     end
     if not t.ranks then t.ranks = SMODS.Ranks end
     if t.onesuit then t.suits = compact(t.suits) end
@@ -223,13 +274,10 @@ G.FUNCS.create_playing_cards_in_deck_alt = function(t)
 end
 
 G.FUNCS.create_playing_cards_in_deck_balanced = function(t)
+    t = t or {}
     if not t.base_amount then t.base_amount = 1 end
     if not t.suits then
-        if t.allow_hidden then
-            t.suits = SMODS.Suits
-        else
-            t.suits = G.FUNCS.not_hidden_suits()
-        end
+        t.suits = G.FUNCS.filter_suits(t)
     end
     if not t.ranks then t.ranks = SMODS.Ranks end
     if t.onesuit then t.suits = compact(t.suits) end
@@ -317,11 +365,7 @@ end
 G.FUNCS.create_playing_cards_in_deck_straight = function(t)
     if not t.amount then t.amount = 1 end
     if not t.suits then
-        if t.allow_hidden then
-            t.suits = SMODS.Suits
-        else
-            t.suits = G.FUNCS.not_hidden_suits()
-        end
+        t.suits = G.FUNCS.filter_suits(t)
     end
     if not t.ranks then t.ranks = SMODS.Ranks end
     if t.onesuit then t.suits = compact(t.suits) end
@@ -424,6 +468,120 @@ G.FUNCS.parcel_effect = function(card, t)
     delay(0.6)
 end
 
+G.FUNCS.destroy_cards = function(cards)
+	for i=1, #cards do
+		if cards[i].ability.name == 'Glass Card' then 
+			cards[i]:shatter()
+		else
+			cards[i]:start_dissolve(nil, i == 1)
+		end
+	end
+	for i=1, #G.jokers.cards do
+		G.jokers.cards[i]:calculate_joker({remove_playing_cards = true, removed = cards})
+	end
+end
+
+G.FUNCS.destroy_cards_in_hand = function(t)
+	local targets = {}
+    if t.amount_selected then
+        for index, value in ipairs(G.hand.highlighted) do
+            if not value.ability.eternal then
+                targets[value] = true
+            end
+        end
+    end
+    if t.amount_random then
+        local temp_hand = {}
+        if t.only_unselected then
+            local selected = {}
+            for index, value in ipairs(G.hand.highlighted) do
+                selected[value] = true
+            end
+            for index, value in ipairs(G.hand.cards) do
+                if not selected[value] then
+                    temp_hand[#temp_hand+1] = value
+                end
+            end
+        else
+            for k, v in ipairs(G.hand.cards) do temp_hand[#temp_hand+1] = v end
+        end
+        table.sort(temp_hand, function (a, b) return not a.playing_card or not b.playing_card or a.playing_card < b.playing_card end)
+        pseudoshuffle(temp_hand, pseudoseed('draft_destroy'))
+
+        local total_added = 0
+        local i = 1
+        while total_added < t.amount_random do
+            if i > #temp_hand then
+                break
+            end
+            if not temp_hand[i].ability.eternal and not targets[temp_hand[i]] then
+                if t.no_face and temp_hand[i]:is_face() then
+                    goto continue
+                end
+                targets[temp_hand[i]] = true
+                total_added = total_added + 1
+            end
+            ::continue::
+            i = i + 1
+        end
+    end
+    if t.all_cards then
+        for index, value in ipairs(G.hand.cards) do
+            targets[value] = true
+        end
+    end
+    if t.all_selected then
+        for index, value in ipairs(G.hand.highlighted) do
+            if not value.ability.eternal then
+                targets[value] = true
+            end
+        end
+    end
+    if t.all_unselected then
+        local selected = {}
+        for index, value in ipairs(G.hand.highlighted) do
+            selected[value] = true
+        end
+        for index, value in ipairs(G.hand.cards) do
+            if not value.ability.eternal and not selected[value] then
+                targets[value] = true
+            end
+        end
+    end
+    if t.all_face then
+        for index, value in ipairs(G.hand.cards) do
+            if not value.ability.eternal and value:is_face() then
+                targets[value] = true
+            end
+        end
+    end
+    if t.all_below then
+        for index, value in ipairs(G.hand.cards) do
+            if not value.ability.eternal and value.base.nominal <= t.all_below then
+                targets[value] = true
+            end
+        end
+    end
+    local cards_to_destroy = {}
+    for key, value in pairs(targets) do
+        cards_to_destroy[#cards_to_destroy+1] = key
+    end
+    G.FUNCS.destroy_cards(cards_to_destroy)
+end
+
+G.FUNCS.clipper_effect = function(card, t)
+    G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.4, func = function()
+        play_sound('timpani')
+        card:juice_up(0.3, 0.5)
+        if card.ability.extra.cost ~= 0 then
+            ease_dollars(card.ability.extra.cost)
+        end
+        G.FUNCS.destroy_cards_in_hand(t)
+        G.hand:unhighlight_all()
+        return true end }))
+    delay(0.6)
+end
+
 --Localization colors
 local lc = loc_colour
 function loc_colour(_c, _default)
@@ -442,16 +600,12 @@ function loc_colour(_c, _default)
       end]]
 	  G.ARGS.LOC_COLOURS.packet = G.C.SET.Packet
 	  G.ARGS.LOC_COLOURS.parcel = G.C.SET.Parcel
+	  G.ARGS.LOC_COLOURS.clipper = G.C.SET.Clipper
 	  return lc(_c, _default)
 end
 
-G.FUNCS.suit_dist = function (allow_hidden)
-    local suit_table
-    if allow_hidden then
-        suit_table = SMODS.Suits
-    else
-        suit_table = G.FUNCS.not_hidden_suits()
-    end
+G.FUNCS.suit_dist = function (t)
+    local suit_table = G.FUNCS.filter_suits(t)
     local suits = {}
     for key, value in pairs(suit_table) do
         suits[value] = 0
@@ -466,7 +620,7 @@ G.FUNCS.suit_dist = function (allow_hidden)
     return suits
 end
 
-G.FUNCS.popular_suit = function(allow_hidden)
+G.FUNCS.popular_suit = function(t)
     local suits = G.FUNCS.suit_dist()
     local max = 0
     local ret = {}
@@ -481,13 +635,9 @@ G.FUNCS.popular_suit = function(allow_hidden)
         end
     end
     if next(ret) == nil then
-        if allow_hidden then
-            ret = SMODS.Suits
-        else
-            ret = G.FUNCS.not_hidden_suits()
-        end
+        ret = G.FUNCS.filter_suits(t)
+        return ret
     end
-    return ret
 end
 
 G.FUNCS.not_popular_suit = function(allow_hidden)
@@ -505,11 +655,7 @@ G.FUNCS.not_popular_suit = function(allow_hidden)
         end
     end
     if next(ret) == nil then
-        if allow_hidden then
-            ret = SMODS.Suits
-        else
-            ret = G.FUNCS.not_hidden_suits()
-        end
+        ret = G.FUNCS.filter_suits(t)
     end
     return ret
 end
@@ -529,10 +675,8 @@ G.FUNCS.least_popular_suit = function(allow_hidden)
         end
     end
     if next(ret) == nil then
-        if allow_hidden then
-            ret = SMODS.Suits
-        else
-            ret = G.FUNCS.not_hidden_suits()
+        if not t.suits then
+            t.suits = G.FUNCS.filter_suits(t)
         end
     end
     return ret
@@ -651,4 +795,12 @@ G.FUNCS.face_ranks = function()
         if r.face then table.insert(faces, r) end
     end
     return faces
+end
+
+enable_exotics = enable_exotics or function()
+    if G.GAME then G.GAME.Exotic = true end
+end
+
+disable_exotics = disable_exotics or function()
+    if G.GAME then G.GAME.Exotic = false end
 end
